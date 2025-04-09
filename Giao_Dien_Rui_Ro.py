@@ -190,20 +190,28 @@ def load_preprocessor():
 
 mo_hinh = load_model()
 preprocessor = load_preprocessor()
-
-# Header với hình ảnh nổi bật
+# Header nâng cao
 st.markdown("""
-    <div class="highlight-card">
-        <h1 style='text-align: center; color: white; margin-bottom: 10px;'>🔍 Dự Đoán Rủi Ro Tín Dụng</h1>
-        <h4 style='text-align: center; color: rgba(255,255,255,0.9); font-weight: normal;'>
-            Phân tích khả năng hoàn trả khoản vay một cách nhanh chóng và chính xác
-        </h4>
+    <div style="text-align: center; padding: 20px 0;">
+        <h1 style="color: #2C3E50; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin-bottom: 10px;">
+            🏦 Dự Đoán Rủi Ro Tín Dụng
+        </h1>
+        <p style="color: #7F8C8D; font-size: 18px; max-width: 800px; margin: 0 auto;">
+            Phân tích khả năng hoàn trả khoản vay với độ chính xác cao bằng trí tuệ nhân tạo
+        </p>
         <p style='text-align: center; color: rgba(255,255,255,0.7); margin-top: 10px;'>
             NCKH: P.Nam, H.Nam, P.Huy, T.Tiến, V.Vinh
         </p>
+        <div style="margin-top: 15px;">
+            <span style="background-color: #E8F4FC; color: #2E86C1; padding: 5px 15px; border-radius: 20px; font-size: 14px; display: inline-block; margin: 0 5px;">
+                XGBoost Model
+            </span>
+            <span style="background-color: #E8F8F5; color: #28B463; padding: 5px 15px; border-radius: 20px; font-size: 14px; display: inline-block; margin: 0 5px;">
+                Độ chính xác 89%
+            </span>
+        </div>
     </div>
 """, unsafe_allow_html=True)
-
 # Nhập dữ liệu khách hàng
 st.markdown("---")
 st.markdown("<h3 style='color: #2E86C1; font-family: Arial;'>📋 Thông tin khách hàng</h3>", unsafe_allow_html=True)
