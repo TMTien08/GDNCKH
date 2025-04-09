@@ -186,7 +186,6 @@ st.markdown("""
             <span style="background-color: #E8F8F5; color: #28B463; padding: 5px 15px; border-radius: 20px; font-size: 14px; display: inline-block; margin: 0 5px;">
                 Độ chính xác 89%
             </span>
-            
         </div>
     </div>
 """, unsafe_allow_html=True)
