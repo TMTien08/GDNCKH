@@ -4,6 +4,28 @@ import joblib
 import numpy as np
 import plotly.graph_objects as go
 from PIL import Image
+import base64
+
+# Hàm để thêm background image
+def add_bg_from_local(image_file):
+    with open(image_file, "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read())
+    st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background-image: url(data:image/jpeg;base64,{encoded_string.decode()});
+        background-size: cover;
+        background-attachment: fixed;
+        background-opacity: 0.1;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+    )
+
+# Thêm background (đảm bảo bạn có file bank_background.jpg trong cùng thư mục)
+add_bg_from_local('bank_background.jpg')  # Thay bằng tên file hình ảnh của bạn
 
 # Cấu hình giao diện Streamlit
 st.set_page_config(
@@ -13,21 +35,29 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Tùy chỉnh CSS nâng cao
+# Tùy chỉnh CSS nâng cao với background trong suốt
 st.markdown("""
     <style>
     :root {
         --primary: #2E86C1;
-        --secondary: #F7F9FC;
+        --secondary: rgba(247, 249, 252, 0.9);
         --success: #28B463;
         --danger: #E74C3C;
         --text: #34495E;
         --light-text: #7F8C8D;
-        --card-bg: #FFFFFF;
+        --card-bg: rgba(255, 255, 255, 0.95);
         --shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
     
-    .main {background-color: var(--secondary);}
+    .main {background-color: transparent;}
+    
+    /* Làm trong suốt các container chính */
+    .block-container {
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: var(--shadow);
+    }
     
     /* Nút bấm */
     .stButton>button {
@@ -58,6 +88,7 @@ st.markdown("""
         border-radius: 8px;
         border: 1px solid #D5DBDB;
         padding: 10px;
+        background-color: rgba(255, 255, 255, 0.8);
     }
     
     /* Thẻ mở rộng */
@@ -78,6 +109,7 @@ st.markdown("""
     .stDataFrame {
         border-radius: 10px;
         box-shadow: var(--shadow);
+        background-color: var(--card-bg);
     }
     
     /* Tiêu đề */
@@ -119,13 +151,14 @@ st.markdown("""
     /* Kết quả */
     .stAlert {
         border-radius: 10px;
+        background-color: rgba(255, 255, 255, 0.9);
     }
     .stAlert.success {
-        background-color: rgba(40, 180, 99, 0.1);
+        background-color: rgba(40, 180, 99, 0.2);
         border-left: 5px solid var(--success);
     }
     .stAlert.error {
-        background-color: rgba(231, 76, 60, 0.1);
+        background-color: rgba(231, 76, 60, 0.2);
         border-left: 5px solid var(--danger);
     }
     
@@ -137,11 +170,13 @@ st.markdown("""
         font-size: 14px;
         margin-top: 40px;
         border-top: 1px solid #EAEDED;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
     }
     
     /* Card highlight */
     .highlight-card {
-        background: linear-gradient(135deg, #2E86C1 0%, #1B4F72 100%);
+        background: linear-gradient(135deg, rgba(46, 134, 193, 0.9) 0%, rgba(27, 79, 114, 0.9) 100%);
         color: white;
         padding: 20px;
         border-radius: 12px;
@@ -150,6 +185,9 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+
+# ... (phần còn lại của mã giữ nguyên như bạn đã có)
+
 
 # Load dữ liệu gốc để tính tỷ lệ
 @st.cache_data
