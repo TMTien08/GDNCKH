@@ -225,4 +225,3 @@ if st.button("📌 Dự đoán ngay", key="predict_button"):
 # Footer
 st.markdown("---")
 st.markdown("<p style='text-align: center; color: #7F8C8D; font-family: Arial;'>© 2025 - Ứng dụng dự đoán rủi ro tín dụng | Phát triển bởi nhóm NCKH</p>", unsafe_allow_html=True) 
-chỉnh lại giao diện cho đẹp hơn
