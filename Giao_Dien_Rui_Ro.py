@@ -199,7 +199,7 @@ st.markdown("""
         <p style="color: #7F8C8D; font-size: 18px; max-width: 800px; margin: 0 auto;">
             Phân tích khả năng hoàn trả khoản vay với độ chính xác cao bằng trí tuệ nhân tạo
         </p>
-        <p style='text-align: center; color: rgba(255,255,255,0.7); margin-top: 10px;'>
+        <p style="color: #7F8C8D; font-size: 18px; max-width: 800px; margin: 0 auto;'>
             NCKH: P.Nam, H.Nam, P.Huy, T.Tiến, V.Vinh
         </p>
         <div style="margin-top: 15px;">
