@@ -315,7 +315,7 @@ button_container = st.container()
 with button_container:
     col1, col2, col3 = st.columns([1,2,1])
     with col2:
-        if st.button("📌 Dự đoán ngay", 
+        if st.button("📌 y", 
                     key="predict_button",
                     help="Nhấn để phân tích rủi ro tín dụng",
                     type="primary"):
