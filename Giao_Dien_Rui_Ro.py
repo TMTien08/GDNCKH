@@ -4,8 +4,8 @@ import joblib
 import numpy as np
 import plotly.graph_objects as go
 from PIL import Image
-risk_score = np.random.uniform(0, 1)
-# Cấu hình giao diện Streamlit nâng cao
+
+# Cấu hình giao diện Streamlit
 st.set_page_config(
     page_title="Dự Đoán Rủi Ro Tín Dụng",
     layout="wide",
@@ -160,7 +160,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Load dữ liệu và mô hình (giữ nguyên như cũ)
+# Load dữ liệu và mô hình
 @st.cache_resource
 def load_model():
     return joblib.load("credit_risk_model.pkl")
@@ -168,6 +168,30 @@ def load_model():
 @st.cache_resource
 def load_preprocessor():
     return joblib.load("preprocessor.pkl")
+
+# Load model and preprocessor
+model = load_model()
+preprocessor = load_preprocessor()
+
+# Tạo các risk dictionary mẫu (thay thế bằng dữ liệu thực tế của bạn)
+age_risk_dict = {age: np.random.uniform(5, 30) for age in range(18, 101)}
+sex_risk_dict = {"male": 15.2, "female": 12.5}
+job_risk_dict = {0: 25.3, 1: 18.7, 2: 12.1, 3: 8.5}
+credit_amount_risk_dict = {amt: np.random.uniform(10, 40) for amt in range(500, 50001, 100)}
+duration_risk_dict = {dur: np.random.uniform(10, 35) for dur in range(6, 73)}
+housing_risk_dict = {"own": 12.3, "rent": 18.7, "free": 15.4}
+saving_risk_dict = {"NA": 25.6, "little": 18.2, "moderate": 12.7, "quite rich": 8.9, "rich": 5.1}
+checking_risk_dict = {"NA": 22.4, "little": 16.8, "moderate": 11.3, "rich": 7.5}
+purpose_risk_dict = {
+    "car": 18.5, 
+    "furniture/equipment": 15.2, 
+    "radio/TV": 12.7, 
+    "domestic appliances": 11.3,
+    "repairs": 14.8, 
+    "education": 9.5, 
+    "business": 20.1, 
+    "vacation/others": 16.3
+}
 
 # Header nâng cao
 st.markdown("""
@@ -311,116 +335,141 @@ with col4:
         checking_account = checking_mapping[checking_account]
 
 # Nút dự đoán với hiệu ứng
-st.markdown("""
-    <div style="text-align: center; margin: 30px 0;">
-        <button style="background: linear-gradient(135deg, #3498DB, #2E86C1); color: white; border: none; padding: 15px 40px; font-size: 18px; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 8px rgba(46, 134, 193, 0.3); transition: all 0.3s ease;">
-            🔍 Phân tích rủi ro ngay
-        </button>
-    </div>
-""", unsafe_allow_html=True)
+st.markdown("<div style='text-align: center; margin: 30px 0;'>", unsafe_allow_html=True)
+if st.button("🔮 Dự đoán rủi ro tín dụng", key="predict_button", help="Nhấn để phân tích rủi ro tín dụng của khách hàng"):
+    with st.spinner("🔄 Đang phân tích dữ liệu..."):
+        input_data = pd.DataFrame([{
+            "Age": age,
+            "Job": job,
+            "Credit amount": credit_amount,
+            "Duration": duration,
+            "Sex": sex,
+            "Housing": housing,
+            "Saving accounts": saving_accounts,
+            "Checking account": checking_account,
+            "Purpose": purpose
+        }])
+        input_transformed = preprocessor.transform(input_data)
+        prediction = model.predict_proba(input_transformed)[:, 1]
+        risk_score = prediction[0]
 
-if st.button("📌 Dự đoán ngay", key="predict_button"):
-    with st.spinner("⏳ Đang phân tích dữ liệu..."):
-        # Giả lập dữ liệu cho demo
-        risk_score = np.random.uniform(0, 1)
-        
-        # Hiển thị kết quả trong card
-        st.markdown("""
-            <div class="divider"></div>
-            <h3 style="color: #2C3E50; font-family: 'Segoe UI'; display: flex; align-items: center;">
-                <span style="background-color: #2E86C1; color: white; border-radius: 50%; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px;">2</span>
-                Kết quả phân tích
-            </h3>
-        """, unsafe_allow_html=True)
-        
-        if risk_score > 0.5:
-            st.markdown(f"""
-                <div class="result-card danger-card">
-                    <div style="display: flex; align-items: center; justify-content: space-between;">
-                        <div>
-                            <h4 style="color: #E74C3C; margin-bottom: 5px;">⚠️ Nguy cơ tín dụng xấu</h4>
-                            <p style="color: #7F8C8D; margin: 0;">Khả năng không hoàn trả: <strong>{risk_score:.2%}</strong></p>
-                        </div>
-                        <div style="font-size: 24px; color: #E74C3C;">❌</div>
-                    </div>
-                    <div style="margin-top: 15px; background: #FDEDEC; padding: 10px; border-radius: 8px;">
-                        <p style="color: #C0392B; margin: 0; font-size: 14px;">
-                            Khách hàng này có nguy cơ cao không hoàn trả khoản vay. Cần xem xét kỹ lưỡng trước khi phê duyệt.
-                        </p>
-                    </div>
-                </div>
-            """, unsafe_allow_html=True)
-        else:
-            st.markdown(f"""
-                <div class="result-card success-card">
-                    <div style="display: flex; align-items: center; justify-content: space-between;">
-                        <div>
-                            <h4 style="color: #28B463; margin-bottom: 5px;">✅ Khả năng hoàn trả tốt</h4>
-                            <p style="color: #7F8C8D; margin: 0;">Xác suất hoàn trả: <strong>{1-risk_score:.2%}</strong></p>
-                        </div>
-                        <div style="font-size: 24px; color: #28B463;">✔️</div>
-                    </div>
-                    <div style="margin-top: 15px; background: #EAFAF1; padding: 10px; border-radius: 8px;">
-                        <p style="color: #239B56; margin: 0; font-size: 14px;">
-                            Khách hàng này có hồ sơ tín dụng tốt với khả năng hoàn trả cao.
-                        </p>
-                    </div>
-                </div>
-            """, unsafe_allow_html=True)
-        
-        # Biểu đồ trực quan
-        st.markdown("""
-            <div class="divider"></div>
-            <h3 style="color: #2C3E50; font-family: 'Segoe UI'; display: flex; align-items: center;">
-                <span style="background-color: #2E86C1; color: white; border-radius: 50%; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px;">3</span>
-                Phân tích chi tiết
-            </h3>
-        """, unsafe_allow_html=True)
-        
-        col_chart1, col_chart2 = st.columns(2)
-        with col_chart1:
-            fig1 = go.Figure(go.Indicator(
-                mode="gauge+number",
-                value=risk_score * 100,
-                title={"text": "Nguy cơ tín dụng xấu (%)", "font": {"size": 16}},
-                gauge={
-                    "axis": {"range": [0, 100]},
-                    "bar": {"color": "#E74C3C" if risk_score > 0.5 else "#28B463"},
-                    "steps": [
-                        {"range": [0, 30], "color": "#D5F5E3"},
-                        {"range": [30, 70], "color": "#FDEBD0"},
-                        {"range": [70, 100], "color": "#FADBD8"}
-                    ],
-                    "threshold": {"line": {"color": "black", "width": 4}, "thickness": 0.75, "value": 50}
+    # Hiển thị kết quả chi tiết từng đặc trưng
+    st.markdown("---")
+    st.markdown("<h3 style='color: #2E86C1; font-family: Arial;'>📊 Phân tích rủi ro từng đặc trưng</h3>", unsafe_allow_html=True)
+    
+    feature_contributions = {
+        "Tuổi": {"Giá trị": f"{age} tuổi", "Tỷ lệ rủi ro xấu": f"{age_risk_dict.get(age, 0):.2f}%"},
+        "Giới tính": {"Giá trị": "Nam" if sex == "male" else "Nữ", "Tỷ lệ rủi ro xấu": f"{sex_risk_dict.get(sex, 0):.2f}%"},
+        "Công việc": {"Giá trị": list(job_mapping.keys())[list(job_mapping.values()).index(job)], "Tỷ lệ rủi ro xấu": f"{job_risk_dict.get(job, 0):.2f}%"},
+        "Khoản vay": {"Giá trị": f"{credit_amount:,} DM", "Tỷ lệ rủi ro xấu": f"{credit_amount_risk_dict.get(credit_amount, 0):.2f}%"},
+        "Thời hạn": {"Giá trị": f"{duration} tháng", "Tỷ lệ rủi ro xấu": f"{duration_risk_dict.get(duration, 0):.2f}%"},
+        "Nhà ở": {"Giá trị": list(housing_mapping.keys())[list(housing_mapping.values()).index(housing)], "Tỷ lệ rủi ro xấu": f"{housing_risk_dict.get(housing, 0):.2f}%"},
+        "Tài khoản tiết kiệm": {"Giá trị": list(saving_mapping.keys())[list(saving_mapping.values()).index(saving_accounts)], "Tỷ lệ rủi ro xấu": f"{saving_risk_dict.get(saving_accounts, 0):.2f}%"},
+        "Tài khoản vãng lai": {"Giá trị": list(checking_mapping.keys())[list(checking_mapping.values()).index(checking_account)], "Tỷ lệ rủi ro xấu": f"{checking_risk_dict.get(checking_account, 0):.2f}%"},
+        "Mục đích vay": {"Giá trị": list(purpose_mapping.keys())[list(purpose_mapping.values()).index(purpose)], "Tỷ lệ rủi ro xấu": f"{purpose_risk_dict.get(purpose, 0):.2f}%"}
+    }
+    
+    feature_df = pd.DataFrame.from_dict(feature_contributions, orient="index")
+    st.dataframe(
+        feature_df.style
+        .set_properties(**{'background-color': '#FFFFFF', 'border': '1px solid #EAEDED'})
+        .highlight_max(subset=["Tỷ lệ rủi ro xấu"], color='#FADBD8')
+        .highlight_min(subset=["Tỷ lệ rủi ro xấu"], color='#D5F5E3'),
+        use_container_width=True
+    )
+
+    # Hiển thị kết quả tổng hợp với card đẹp
+    st.markdown("---")
+    st.markdown("<h3 style='color: #2E86C1; font-family: Arial;'>🔍 Kết quả dự đoán tổng hợp</h3>", unsafe_allow_html=True)
+    
+    if risk_score > 0.5:
+        st.error(f"""
+            ⚠️ **Nguy cơ tín dụng xấu: {risk_score:.2%}**  
+            *Khách hàng có nguy cơ cao không hoàn trả khoản vay. Cần xem xét kỹ lưỡng trước khi phê duyệt.*
+        """)
+    else:
+        st.success(f"""
+            ✅ **Khả năng hoàn trả tốt: {1-risk_score:.2%}**  
+            *Khách hàng có hồ sơ tín dụng tốt và khả năng hoàn trả cao.*
+        """)
+    
+    st.markdown(f"""
+        <div style="background-color: #F8F9F9; padding: 15px; border-radius: 10px; margin-top: 20px;">
+            <p style="color: #566573; font-size: 15px;">
+                📌 <strong>Giải thích:</strong> Xác suất này được tính toán dựa trên mô hình XGBoost với độ chính xác cao, 
+                phân tích các đặc trưng quan trọng nhất ảnh hưởng đến rủi ro tín dụng.
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # Biểu đồ trực quan nâng cao
+    st.markdown("---")
+    st.markdown("<h3 style='color: #2E86C1; font-family: Arial;'>📈 Trực quan hóa rủi ro</h3>", unsafe_allow_html=True)
+    
+    col_chart1, col_chart2 = st.columns(2)
+    with col_chart1:
+        fig1 = go.Figure(go.Indicator(
+            mode="gauge+number+delta",
+            value=risk_score * 100,
+            title={"text": "Nguy cơ tín dụng xấu (%)", "font": {"size": 18}},
+            domain={"x": [0, 1], "y": [0, 1]},
+            gauge={
+                "axis": {"range": [0, 100], "tickwidth": 1, "tickcolor": "#2E86C1"},
+                "bar": {"color": "#E74C3C" if risk_score > 0.5 else "#28B463", "thickness": 0.3},
+                "bgcolor": "white",
+                "borderwidth": 2,
+                "bordercolor": "gray",
+                "steps": [
+                    {"range": [0, 30], "color": "#D5F5E3"},
+                    {"range": [30, 70], "color": "#FDEBD0"},
+                    {"range": [70, 100], "color": "#FADBD8"}
+                ],
+                "threshold": {
+                    "line": {"color": "black", "width": 4},
+                    "thickness": 0.8,
+                    "value": risk_score * 100
                 }
-            ))
-            fig1.update_layout(
-                height=350,
-                margin=dict(l=50, r=50, b=50, t=50, pad=4)
-            )
-            st.plotly_chart(fig1, use_container_width=True)
+            }
+        ))
+        fig1.update_layout(
+            height=350,
+            margin=dict(l=50, r=50, b=50, t=80),
+            font=dict(color="#2E86C1", family="Arial")
+        )
+        st.plotly_chart(fig1, use_container_width=True)
 
-        with col_chart2:
-            labels = ["Hoàn trả tốt", "Nợ xấu"]
-            values = [1 - risk_score, risk_score]
-            fig3 = go.Figure(data=[go.Pie(
-                labels=labels, 
-                values=values, 
-                hole=0.4,
-                marker_colors=["#28B463", "#E74C3C"],
-                textinfo='percent+label',
-                hoverinfo='label+percent',
-                textfont_size=14
-            )])
-            fig3.update_layout(
-                title="Tỷ lệ rủi ro tín dụng",
-                title_x=0.5,
-                height=350,
-                showlegend=False
-            )
-            st.plotly_chart(fig3, use_container_width=True)
+    with col_chart2:
+        labels = ["Hoàn trả tốt", "Nợ xấu"]
+        values = [1 - risk_score, risk_score]
+        colors = ["#28B463", "#E74C3C"]
+        
+        fig3 = go.Figure(data=[go.Pie(
+            labels=labels, 
+            values=values, 
+            hole=0.5,
+            marker=dict(colors=colors),
+            textinfo='percent+value',
+            hoverinfo='label+percent',
+            textfont_size=15
+        )])
+        
+        fig3.update_layout(
+            title="Phân bổ rủi ro tín dụng",
+            title_x=0.5,
+            title_font=dict(size=18),
+            legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=-0.2,
+                xanchor="center",
+                x=0.5
+            ),
+            height=350,
+            margin=dict(l=50, r=50, b=50, t=80)
+        )
+        st.plotly_chart(fig3, use_container_width=True)
 
-# Footer nâng cao
+# Footer chuyên nghiệp
 st.markdown("""
     <div class="footer">
         <div style="margin-bottom: 10px;">
