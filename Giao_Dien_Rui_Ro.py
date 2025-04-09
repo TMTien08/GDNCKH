@@ -321,25 +321,8 @@ st.markdown("""
 
 if st.button("📌 Dự đoán ngay", key="predict_button"):
     with st.spinner("⏳ Đang phân tích dữ liệu..."):
-        model = load_model()
-        preprocessor = load_preprocessor()
-
-        # Tạo DataFrame từ input
-        input_data = pd.DataFrame({
-            'age': [age],
-            'sex': [sex],
-            'job': [job],
-            'credit_amount': [credit_amount],
-            'duration': [duration],
-            'purpose': [purpose],
-            'housing': [housing],
-            'saving_accounts': [saving_accounts],
-            'checking_account': [checking_account]
-        })
-
-        # Tiền xử lý và dự đoán
-        processed_data = preprocessor.transform(input_data)
-        risk_score = model.predict_proba(processed_data)[0][1] 
+        # Giả lập dữ liệu cho demo
+        risk_score = np.random.uniform(0, 1)
         
         # Hiển thị kết quả trong card
         st.markdown("""
