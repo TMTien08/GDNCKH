@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 
 # Cấu hình giao diện Streamlit
-st.set_page_config(page_title="Dự Đoán Rủi Ro Tín Dụng", page_icon="💰", layout="wide")
+st.set_page_config(page_title="Dự Đoán Rủi Ro Tín Dụng", layout="wide")
 
 # Tùy chỉnh CSS
 st.markdown("""
