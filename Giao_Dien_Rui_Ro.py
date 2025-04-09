@@ -311,113 +311,135 @@ with col4:
         checking_account = checking_mapping[checking_account]
 
 
-button_container = st.container()
-with button_container:
-    col1, col2, col3 = st.columns([1,2,1])
-    with col2:
-        if st.button("📌 y", 
-                    key="predict_button",
-                    help="Nhấn để phân tích rủi ro tín dụng",
-                    type="primary"):
-            with st.spinner("⏳ Đang phân tích dữ liệu..."):
-                # Giả lập dữ liệu cho demo
-                risk_score = np.random.uniform(0, 1)
-                
-                # Hiển thị kết quả trong card
-                st.markdown("""
-                    <div class="divider"></div>
-                    <h3 style="color: #2C3E50; font-family: 'Segoe UI'; display: flex; align-items: center;">
-                        <span style="background-color: #2E86C1; color: white; border-radius: 50%; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px;">2</span>
-                        Kết quả phân tích
-                    </h3>
-                """, unsafe_allow_html=True)
-                
-                if risk_score > 0.5:
-                    st.markdown(f"""
-                        <div class="result-card danger-card">
-                            <div style="display: flex; align-items: center; justify-content: space-between;">
-                                <div>
-                                    <h4 style="color: #E74C3C; margin-bottom: 5px;">⚠️ Nguy cơ tín dụng xấu</h4>
-                                    <p style="color: #7F8C8D; margin: 0;">Khả năng không hoàn trả: <strong>{risk_score:.2%}</strong></p>
-                                </div>
-                                <div style="font-size: 24px; color: #E74C3C;">❌</div>
+st.markdown("""
+    <style>
+    div.stButton > button:first-child {
+        background: linear-gradient(to right, #3498db, #2e86c1);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 12px 24px;
+        font-weight: bold;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+        display: block;
+    }
+    div.stButton > button:first-child:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        background: linear-gradient(to right, #2e86c1, #3498db);
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# Tạo nút căn giữa
+col1, col2, col3 = st.columns([1,2,1])
+with col2:
+    if st.button("📌 Dự đoán ngay", 
+                key="predict_button",
+                help="Nhấn để phân tích rủi ro tín dụng"):
+        with st.spinner("⏳ Đang phân tích dữ liệu..."):
+            # Giả lập dữ liệu cho demo
+            risk_score = np.random.uniform(0, 1)
+            
+            # Hiển thị kết quả trong card
+            st.markdown("""
+                <div class="divider"></div>
+                <h3 style="color: #2C3E50; font-family: 'Segoe UI'; display: flex; align-items: center;">
+                    <span style="background-color: #2E86C1; color: white; border-radius: 50%; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px;">2</span>
+                    Kết quả phân tích
+                </h3>
+            """, unsafe_allow_html=True)
+            
+            if risk_score > 0.5:
+                st.markdown(f"""
+                    <div class="result-card danger-card">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <h4 style="color: #E74C3C; margin-bottom: 5px;">⚠️ Nguy cơ tín dụng xấu</h4>
+                                <p style="color: #7F8C8D; margin: 0;">Khả năng không hoàn trả: <strong>{risk_score:.2%}</strong></p>
                             </div>
-                            <div style="margin-top: 15px; background: #FDEDEC; padding: 10px; border-radius: 8px;">
-                                <p style="color: #C0392B; margin: 0; font-size: 14px;">
-                                    Khách hàng này có nguy cơ cao không hoàn trả khoản vay. Cần xem xét kỹ lưỡng trước khi phê duyệt.
-                                </p>
-                            </div>
+                            <div style="font-size: 24px; color: #E74C3C;">❌</div>
                         </div>
-                    """, unsafe_allow_html=True)
-                else:
-                    st.markdown(f"""
-                        <div class="result-card success-card">
-                            <div style="display: flex; align-items: center; justify-content: space-between;">
-                                <div>
-                                    <h4 style="color: #28B463; margin-bottom: 5px;">✅ Khả năng hoàn trả tốt</h4>
-                                    <p style="color: #7F8C8D; margin: 0;">Xác suất hoàn trả: <strong>{1-risk_score:.2%}</strong></p>
-                                </div>
-                                <div style="font-size: 24px; color: #28B463;">✔️</div>
-                            </div>
-                            <div style="margin-top: 15px; background: #EAFAF1; padding: 10px; border-radius: 8px;">
-                                <p style="color: #239B56; margin: 0; font-size: 14px;">
-                                    Khách hàng này có hồ sơ tín dụng tốt với khả năng hoàn trả cao.
-                                </p>
-                            </div>
+                        <div style="margin-top: 15px; background: #FDEDEC; padding: 10px; border-radius: 8px;">
+                            <p style="color: #C0392B; margin: 0; font-size: 14px;">
+                                Khách hàng này có nguy cơ cao không hoàn trả khoản vay. Cần xem xét kỹ lưỡng trước khi phê duyệt.
+                            </p>
                         </div>
-                    """, unsafe_allow_html=True)
-                
-                # Biểu đồ trực quan
-                st.markdown("""
-                    <div class="divider"></div>
-                    <h3 style="color: #2C3E50; font-family: 'Segoe UI'; display: flex; align-items: center;">
-                        <span style="background-color: #2E86C1; color: white; border-radius: 50%; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px;">3</span>
-                        Phân tích chi tiết
-                    </h3>
+                    </div>
                 """, unsafe_allow_html=True)
-                
-                col_chart1, col_chart2 = st.columns(2)
-                with col_chart1:
-                    fig1 = go.Figure(go.Indicator(
-                        mode="gauge+number",
-                        value=risk_score * 100,
-                        title={"text": "Nguy cơ tín dụng xấu (%)", "font": {"size": 16}},
-                        gauge={
-                            "axis": {"range": [0, 100]},
-                            "bar": {"color": "#E74C3C" if risk_score > 0.5 else "#28B463"},
-                            "steps": [
-                                {"range": [0, 30], "color": "#D5F5E3"},
-                                {"range": [30, 70], "color": "#FDEBD0"},
-                                {"range": [70, 100], "color": "#FADBD8"}
-                            ],
-                            "threshold": {"line": {"color": "black", "width": 4}, "thickness": 0.75, "value": 50}
-                        }
-                    ))
-                    fig1.update_layout(
-                        height=350,
-                        margin=dict(l=50, r=50, b=50, t=50, pad=4)
-                    )
-                    st.plotly_chart(fig1, use_container_width=True)
-        
-                with col_chart2:
-                    labels = ["Hoàn trả tốt", "Nợ xấu"]
-                    values = [1 - risk_score, risk_score]
-                    fig3 = go.Figure(data=[go.Pie(
-                        labels=labels, 
-                        values=values, 
-                        hole=0.4,
-                        marker_colors=["#28B463", "#E74C3C"],
-                        textinfo='percent+label',
-                        hoverinfo='label+percent',
-                        textfont_size=14
-                    )])
-                    fig3.update_layout(
-                        title="Tỷ lệ rủi ro tín dụng",
-                        title_x=0.5,
-                        height=350,
-                        showlegend=False
-                    )
-                    st.plotly_chart(fig3, use_container_width=True)
+            else:
+                st.markdown(f"""
+                    <div class="result-card success-card">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <h4 style="color: #28B463; margin-bottom: 5px;">✅ Khả năng hoàn trả tốt</h4>
+                                <p style="color: #7F8C8D; margin: 0;">Xác suất hoàn trả: <strong>{1-risk_score:.2%}</strong></p>
+                            </div>
+                            <div style="font-size: 24px; color: #28B463;">✔️</div>
+                        </div>
+                        <div style="margin-top: 15px; background: #EAFAF1; padding: 10px; border-radius: 8px;">
+                            <p style="color: #239B56; margin: 0; font-size: 14px;">
+                                Khách hàng này có hồ sơ tín dụng tốt với khả năng hoàn trả cao.
+                            </p>
+                        </div>
+                    </div>
+                """, unsafe_allow_html=True)
+            
+            # Biểu đồ trực quan
+            st.markdown("""
+                <div class="divider"></div>
+                <h3 style="color: #2C3E50; font-family: 'Segoe UI'; display: flex; align-items: center;">
+                    <span style="background-color: #2E86C1; color: white; border-radius: 50%; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px;">3</span>
+                    Phân tích chi tiết
+                </h3>
+            """, unsafe_allow_html=True)
+            
+            col_chart1, col_chart2 = st.columns(2)
+            with col_chart1:
+                fig1 = go.Figure(go.Indicator(
+                    mode="gauge+number",
+                    value=risk_score * 100,
+                    title={"text": "Nguy cơ tín dụng xấu (%)", "font": {"size": 16}},
+                    gauge={
+                        "axis": {"range": [0, 100]},
+                        "bar": {"color": "#E74C3C" if risk_score > 0.5 else "#28B463"},
+                        "steps": [
+                            {"range": [0, 30], "color": "#D5F5E3"},
+                            {"range": [30, 70], "color": "#FDEBD0"},
+                            {"range": [70, 100], "color": "#FADBD8"}
+                        ],
+                        "threshold": {"line": {"color": "black", "width": 4}, "thickness": 0.75, "value": 50}
+                    }
+                ))
+                fig1.update_layout(
+                    height=350,
+                    margin=dict(l=50, r=50, b=50, t=50, pad=4)
+                )
+                st.plotly_chart(fig1, use_container_width=True)
+    
+            with col_chart2:
+                labels = ["Hoàn trả tốt", "Nợ xấu"]
+                values = [1 - risk_score, risk_score]
+                fig3 = go.Figure(data=[go.Pie(
+                    labels=labels, 
+                    values=values, 
+                    hole=0.4,
+                    marker_colors=["#28B463", "#E74C3C"],
+                    textinfo='percent+label',
+                    hoverinfo='label+percent',
+                    textfont_size=14
+                )])
+                fig3.update_layout(
+                    title="Tỷ lệ rủi ro tín dụng",
+                    title_x=0.5,
+                    height=350,
+                    showlegend=False
+                )
+                st.plotly_chart(fig3, use_container_width=True)
 
 # Footer nâng cao
 st.markdown("""
