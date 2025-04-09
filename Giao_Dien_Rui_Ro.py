@@ -7,9 +7,9 @@ from PIL import Image
 
 # Cấu hình giao diện Streamlit
 st.set_page_config(
-    page_title="Dự Đoán Rủi Ro Tín Dụng",
+    page_title="Dự Đoán Rủi Ro Tín Dụng", 
+    page_icon="💰", 
     layout="wide",
-    page_icon="🏦",
     initial_sidebar_state="expanded"
 )
 
@@ -17,115 +17,89 @@ st.set_page_config(
 st.markdown("""
     <style>
     :root {
-        --primary-color: #3498DB;
-        --secondary-color: #2980B9;
-        --success-color: #2ECC71;
-        --danger-color: #E74C3C;
-        --warning-color: #F39C12;
-        --light-color: #ECF0F1;
-        --dark-color: #2C3E50;
-        --text-color: #34495E;
+        --primary: #2E86C1;
+        --secondary: #F7F9FC;
+        --success: #28B463;
+        --danger: #E74C3C;
+        --text: #34495E;
+        --light-text: #7F8C8D;
+        --card-bg: #FFFFFF;
+        --shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
     
-    .main {
-        background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
-    }
+    .main {background-color: var(--secondary);}
     
-    .stApp {
-        background-color: var(--light-color);
-    }
-    
+    /* Nút bấm */
     .stButton>button {
-        background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+        background-color: var(--primary);
         color: white;
-        border-radius: 12px;
+        border-radius: 10px;
         padding: 12px 24px;
         font-weight: bold;
         border: none;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        box-shadow: var(--shadow);
         transition: all 0.3s ease;
+        width: 100%;
         font-size: 16px;
     }
-    
     .stButton>button:hover {
+        background-color: #1B4F72;
         transform: translateY(-2px);
-        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        background: linear-gradient(to right, var(--secondary-color), var(--primary-color));
+        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
     }
     
-    .stSlider .st-dn {
-        background-color: var(--primary-color);
+    /* Thanh trượt */
+    .stSlider .st-dn {background-color: var(--primary);}
+    
+    /* Ô nhập liệu */
+    .stTextInput>div>div>input, 
+    .stNumberInput>div>div>input,
+    .stSelectbox>div>div>select {
+        border-radius: 8px;
+        border: 1px solid #D5DBDB;
+        padding: 10px;
     }
     
-    .stRadio>div>label, .stSelectbox>label, .stNumberInput>label {
-        font-size: 16px;
-        color: var(--text-color);
-        font-weight: 500;
-    }
-    
+    /* Thẻ mở rộng */
     .stExpander {
-        background-color: white;
+        background-color: var(--card-bg);
         border-radius: 12px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        border: 1px solid #e0e0e0;
+        box-shadow: var(--shadow);
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+    .stExpander .streamlit-expanderHeader {
+        font-weight: bold;
+        color: var(--primary);
+        font-size: 18px;
     }
     
-    .stExpander .st-emotion-cache-1q7spjk {
-        background-color: white;
-    }
-    
-    .stMarkdown h1 {
-        text-align: center;
-        color: var(--dark-color);
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        margin-bottom: 0.5rem;
-    }
-    
-    .stMarkdown h3 {
-        color: var(--primary-color);
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        border-bottom: 2px solid var(--primary-color);
-        padding-bottom: 8px;
-    }
-    
-    .feature-card {
-        background: white;
+    /* Bảng */
+    .stDataFrame {
         border-radius: 10px;
-        padding: 15px;
-        margin-bottom: 15px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        border-left: 4px solid var(--primary-color);
+        box-shadow: var(--shadow);
     }
     
-    .result-card {
-        background: white;
-        border-radius: 12px;
-        padding: 20px;
-        margin: 10px 0;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    /* Tiêu đề */
+    h1, h2, h3, h4 {
+        color: var(--text) !important;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
-    .success-card {
-        border-top: 4px solid var(--success-color);
-    }
-    
-    .danger-card {
-        border-top: 4px solid var(--danger-color);
-    }
-    
+    /* Tooltip */
     .tooltip {
         position: relative;
         display: inline-block;
-        cursor: pointer;
+        border-bottom: 1px dotted var(--primary);
+        cursor: help;
     }
-    
     .tooltip .tooltiptext {
         visibility: hidden;
-        width: 250px;
-        background-color: var(--dark-color);
+        width: 220px;
+        background-color: var(--text);
         color: white;
         text-align: center;
-        border-radius: 8px;
+        border-radius: 6px;
         padding: 10px;
         position: absolute;
         z-index: 1;
@@ -135,32 +109,77 @@ st.markdown("""
         opacity: 0;
         transition: opacity 0.3s;
         font-size: 14px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        box-shadow: var(--shadow);
     }
-    
     .tooltip:hover .tooltiptext {
         visibility: visible;
         opacity: 1;
     }
     
+    /* Kết quả */
+    .stAlert {
+        border-radius: 10px;
+    }
+    .stAlert.success {
+        background-color: rgba(40, 180, 99, 0.1);
+        border-left: 5px solid var(--success);
+    }
+    .stAlert.error {
+        background-color: rgba(231, 76, 60, 0.1);
+        border-left: 5px solid var(--danger);
+    }
+    
+    /* Footer */
     .footer {
         text-align: center;
         padding: 20px;
-        color: #7F8C8D;
-        font-family: Arial;
-        margin-top: 30px;
-        border-top: 1px solid #e0e0e0;
+        color: var(--light-text);
+        font-size: 14px;
+        margin-top: 40px;
+        border-top: 1px solid #EAEDED;
     }
     
-    .divider {
-        height: 1px;
-        background: linear-gradient(to right, transparent, var(--primary-color), transparent);
-        margin: 25px 0;
+    /* Card highlight */
+    .highlight-card {
+        background: linear-gradient(135deg, #2E86C1 0%, #1B4F72 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        margin-bottom: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Load dữ liệu và mô hình
+# Load dữ liệu gốc để tính tỷ lệ
+@st.cache_data
+def load_data():
+    file_path = "german_credit_data.csv"
+    df = pd.read_csv(file_path)
+    if "Unnamed: 0" in df.columns:
+        df = df.drop(columns=["Unnamed: 0"])
+    return df
+
+df = load_data()
+
+# Tính tỷ lệ rủi ro xấu cho từng đặc trưng
+@st.cache_data
+def calculate_risk_rates(df, feature):
+    risk_rates = df.groupby(feature)["Risk"].value_counts(normalize=True).unstack().fillna(0)
+    risk_rates["Bad_Rate"] = risk_rates["bad"] * 100
+    return risk_rates["Bad_Rate"].to_dict()
+
+age_risk_dict = calculate_risk_rates(df, "Age")
+job_risk_dict = calculate_risk_rates(df, "Job")
+credit_amount_risk_dict = calculate_risk_rates(df, "Credit amount")
+duration_risk_dict = calculate_risk_rates(df, "Duration")
+sex_risk_dict = calculate_risk_rates(df, "Sex")
+housing_risk_dict = calculate_risk_rates(df, "Housing")
+saving_risk_dict = calculate_risk_rates(df, "Saving accounts")
+checking_risk_dict = calculate_risk_rates(df, "Checking account")
+purpose_risk_dict = calculate_risk_rates(df, "Purpose")
+
+# Load mô hình và bộ xử lý dữ liệu
 @st.cache_resource
 def load_model():
     return joblib.load("credit_risk_model.pkl")
@@ -169,169 +188,72 @@ def load_model():
 def load_preprocessor():
     return joblib.load("preprocessor.pkl")
 
-# Load model and preprocessor
-model = load_model()
+mo_hinh = load_model()
 preprocessor = load_preprocessor()
 
-# Tạo các risk dictionary mẫu (thay thế bằng dữ liệu thực tế của bạn)
-age_risk_dict = {age: np.random.uniform(5, 30) for age in range(18, 101)}
-sex_risk_dict = {"male": 15.2, "female": 12.5}
-job_risk_dict = {0: 25.3, 1: 18.7, 2: 12.1, 3: 8.5}
-credit_amount_risk_dict = {amt: np.random.uniform(10, 40) for amt in range(500, 50001, 100)}
-duration_risk_dict = {dur: np.random.uniform(10, 35) for dur in range(6, 73)}
-housing_risk_dict = {"own": 12.3, "rent": 18.7, "free": 15.4}
-saving_risk_dict = {"NA": 25.6, "little": 18.2, "moderate": 12.7, "quite rich": 8.9, "rich": 5.1}
-checking_risk_dict = {"NA": 22.4, "little": 16.8, "moderate": 11.3, "rich": 7.5}
-purpose_risk_dict = {
-    "car": 18.5, 
-    "furniture/equipment": 15.2, 
-    "radio/TV": 12.7, 
-    "domestic appliances": 11.3,
-    "repairs": 14.8, 
-    "education": 9.5, 
-    "business": 20.1, 
-    "vacation/others": 16.3
-}
-
-# Header nâng cao
+# Header với hình ảnh nổi bật
 st.markdown("""
-    <div style="text-align: center; padding: 20px 0;">
-        <h1 style="color: #2C3E50; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin-bottom: 10px;">
-            🏦 Dự Đoán Rủi Ro Tín Dụng
-        </h1>
-        <p style="color: #7F8C8D; font-size: 18px; max-width: 800px; margin: 0 auto;">
-            Phân tích khả năng hoàn trả khoản vay với độ chính xác cao bằng trí tuệ nhân tạo
+    <div class="highlight-card">
+        <h1 style='text-align: center; color: white; margin-bottom: 10px;'>🔍 Dự Đoán Rủi Ro Tín Dụng</h1>
+        <h4 style='text-align: center; color: rgba(255,255,255,0.9); font-weight: normal;'>
+            Phân tích khả năng hoàn trả khoản vay một cách nhanh chóng và chính xác
+        </h4>
+        <p style='text-align: center; color: rgba(255,255,255,0.7); margin-top: 10px;'>
+            NCKH: P.Nam, H.Nam, P.Huy, T.Tiến, V.Vinh
         </p>
-        <div style="margin-top: 15px;">
-            <span style="background-color: #E8F4FC; color: #2E86C1; padding: 5px 15px; border-radius: 20px; font-size: 14px; display: inline-block; margin: 0 5px;">
-                XGBoost Model
-            </span>
-            <span style="background-color: #E8F8F5; color: #28B463; padding: 5px 15px; border-radius: 20px; font-size: 14px; display: inline-block; margin: 0 5px;">
-                Độ chính xác 89%
-            </span>
-        </div>
     </div>
 """, unsafe_allow_html=True)
 
-# Thêm ảnh header (nếu có)
-try:
-    header_img = Image.open("header_bank.jpg")
-    st.image(header_img, use_column_width=True)
-except:
-    pass
-
-# Nhập dữ liệu khách hàng với giao diện card
-st.markdown("""
-    <div class="divider"></div>
-    <h3 style="color: #2C3E50; font-family: 'Segoe UI'; display: flex; align-items: center;">
-        <span style="background-color: #2E86C1; color: white; border-radius: 50%; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px;">1</span>
-        Thông tin khách hàng
-    </h3>
-""", unsafe_allow_html=True)
+# Nhập dữ liệu khách hàng
+st.markdown("---")
+st.markdown("<h3 style='color: #2E86C1; font-family: Arial;'>📋 Thông tin khách hàng</h3>", unsafe_allow_html=True)
 
 col1, col2 = st.columns([1, 1], gap="large")
 with col1:
-    with st.expander("**👤 Thông tin cá nhân**", expanded=True):
-        age = st.slider("**📆 Tuổi**", 18, 100, 30, 
-                       help="Tuổi của khách hàng ảnh hưởng đến khả năng trả nợ")
-        sex = st.radio("**🚻 Giới tính**", ["Nam", "Nữ"], 
-                       horizontal=True, index=0)
+    with st.expander("🔍 Thông tin cá nhân", expanded=True):
+        age = st.slider("📆 Tuổi", 18, 100, 30, help="Chọn tuổi của khách hàng")
+        sex = st.radio("🚻 Giới tính", ["Nam", "Nữ"], horizontal=True)
         sex = "male" if sex == "Nam" else "female"
-        job = st.selectbox("**👔 Loại công việc**", 
-                          ["Không có kỹ năng & không cư trú", "Không có kỹ năng & cư trú", 
-                           "Có kỹ năng", "Rất có kỹ năng"])
-        job_mapping = {
-            "Không có kỹ năng & không cư trú": 0, 
-            "Không có kỹ năng & cư trú": 1, 
-            "Có kỹ năng": 2, 
-            "Rất có kỹ năng": 3
-        }
+        job = st.selectbox("👔 Loại công việc", ["Không có kỹ năng & không cư trú", "Không có kỹ năng & cư trú", "Có kỹ năng", "Rất có kỹ năng"])
+        job_mapping = {"Không có kỹ năng & không cư trú": 0, "Không có kỹ năng & cư trú": 1, "Có kỹ năng": 2, "Rất có kỹ năng": 3}
         job = job_mapping[job]
 
 with col2:
-    with st.expander("**💰 Thông tin tài chính**", expanded=True):
-        credit_amount = st.number_input("**💵 Khoản vay (DM)**", 
-                                      min_value=500, max_value=50000, 
-                                      value=10000, step=100)
-        duration = st.slider("**🕒 Thời hạn vay (tháng)**", 6, 72, 24,
-                           help="Thời gian hoàn trả khoản vay")
-        purpose = st.selectbox("**🎯 Mục đích vay**", 
-                             ["Mua ô tô", "Mua nội thất/trang thiết bị", 
-                              "Mua radio/TV", "Mua thiết bị gia dụng", 
-                              "Sửa chữa", "Giáo dục", "Kinh doanh", 
-                              "Du lịch/Khác"])
-        purpose_mapping = {
-            "Mua ô tô": "car", 
-            "Mua nội thất/trang thiết bị": "furniture/equipment", 
-            "Mua radio/TV": "radio/TV", 
-            "Mua thiết bị gia dụng": "domestic appliances",
-            "Sửa chữa": "repairs", 
-            "Giáo dục": "education", 
-            "Kinh doanh": "business", 
-            "Du lịch/Khác": "vacation/others"
-        }
+    with st.expander("💰 Thông tin tài chính", expanded=True):
+        credit_amount = st.number_input("💵 Khoản vay (DM)", min_value=500, max_value=50000, value=10000, step=100)
+        duration = st.slider("🕒 Thời hạn vay (tháng)", 6, 72, 24)
+        purpose = st.selectbox("🎯 Mục đích vay", ["Mua ô tô", "Mua nội thất/trang thiết bị", "Mua radio/TV", "Mua thiết bị gia dụng", "Sửa chữa", "Giáo dục", "Kinh doanh", "Du lịch/Khác"])
+        purpose_mapping = {"Mua ô tô": "car", "Mua nội thất/trang thiết bị": "furniture/equipment", "Mua radio/TV": "radio/TV", "Mua thiết bị gia dụng": "domestic appliances",
+                           "Sửa chữa": "repairs", "Giáo dục": "education", "Kinh doanh": "business", "Du lịch/Khác": "vacation/others"}
         purpose = purpose_mapping[purpose]
 
 col3, col4 = st.columns([1, 1], gap="large")
 with col3:
-    with st.expander("**🏠 Tình trạng nhà ở**", expanded=True):
-        housing = st.selectbox("**Hình thức nhà ở**", 
-                             ["Sở hữu", "Thuê", "Miễn phí"])
-        housing_mapping = {
-            "Sở hữu": "own", 
-            "Thuê": "rent", 
-            "Miễn phí": "free"
-        }
+    with st.expander("🏠 Tình trạng nhà ở", expanded=True):
+        housing = st.selectbox("Hình thức nhà ở", ["Sở hữu", "Thuê", "Miễn phí"])
+        housing_mapping = {"Sở hữu": "own", "Thuê": "rent", "Miễn phí": "free"}
         housing = housing_mapping[housing]
 
 with col4:
-    with st.expander("**💳 Tài khoản ngân hàng**", expanded=True):
+    with st.expander("🏦 Tài khoản ngân hàng", expanded=True):
         st.markdown("""
             <div class="tooltip">
-                <strong>💰 Tài khoản tiết kiệm</strong>
-                <span class="tooltiptext">
-                    <strong>Giải thích:</strong><br>
-                    - Không có: 0 DM<br>
-                    - Ít: 1-500 DM<br>
-                    - Trung bình: 501-1000 DM<br>
-                    - Khá nhiều: 1001-5000 DM<br>
-                    - Nhiều: >5000 DM
-                </span>
+                💰 Tài khoản tiết kiệm
+                <span class="tooltiptext">Không có: 0 DM<br>Ít: 1-500 DM<br>Trung bình: 501-1000 DM<br>Khá nhiều: 1001-5000 DM<br>Nhiều: >5000 DM</span>
             </div>
         """, unsafe_allow_html=True)
-        saving_accounts = st.selectbox("", 
-                                     ["Không có", "Ít", "Trung bình", "Khá nhiều", "Nhiều"], 
-                                     key="savings")
-        saving_mapping = {
-            "Không có": "NA", 
-            "Ít": "little", 
-            "Trung bình": "moderate", 
-            "Khá nhiều": "quite rich", 
-            "Nhiều": "rich"
-        }
+        saving_accounts = st.selectbox("savings", ["Không có", "Ít", "Trung bình", "Khá nhiều", "Nhiều"], key="savings", label_visibility="collapsed")
+        saving_mapping = {"Không có": "NA", "Ít": "little", "Trung bình": "moderate", "Khá nhiều": "quite rich", "Nhiều": "rich"}
         saving_accounts = saving_mapping[saving_accounts]
 
         st.markdown("""
             <div class="tooltip">
-                <strong>🏦 Tài khoản vãng lai</strong>
-                <span class="tooltiptext">
-                    <strong>Giải thích:</strong><br>
-                    - Không có: 0 DM<br>
-                    - Ít: 1-200 DM<br>
-                    - Trung bình: 201-500 DM<br>
-                    - Nhiều: >500 DM
-                </span>
+                🏦 Tài khoản vãng lai
+                <span class="tooltiptext">Không có: 0 DM<br>Ít: 1-200 DM<br>Trung bình: 201-500 DM<br>Nhiều: >500 DM</span>
             </div>
         """, unsafe_allow_html=True)
-        checking_account = st.selectbox("", 
-                                      ["Không có", "Ít", "Trung bình", "Nhiều"], 
-                                      key="checking")
-        checking_mapping = {
-            "Không có": "NA", 
-            "Ít": "little", 
-            "Trung bình": "moderate", 
-            "Nhiều": "rich"
-        }
+        checking_account = st.selectbox("checking", ["Không có", "Ít", "Trung bình", "Nhiều"], key="checking", label_visibility="collapsed")
+        checking_mapping = {"Không có": "NA", "Ít": "little", "Trung bình": "moderate", "Nhiều": "rich"}
         checking_account = checking_mapping[checking_account]
 
 # Nút dự đoán với hiệu ứng
@@ -350,7 +272,7 @@ if st.button("🔮 Dự đoán rủi ro tín dụng", key="predict_button", help
             "Purpose": purpose
         }])
         input_transformed = preprocessor.transform(input_data)
-        prediction = model.predict_proba(input_transformed)[:, 1]
+        prediction = mo_hinh.predict_proba(input_transformed)[:, 1]
         risk_score = prediction[0]
 
     # Hiển thị kết quả chi tiết từng đặc trưng
