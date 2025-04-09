@@ -178,6 +178,7 @@ st.markdown("""
         <p style="color: #7F8C8D; font-size: 18px; max-width: 800px; margin: 0 auto;">
             Phân tích khả năng hoàn trả khoản vay với độ chính xác cao bằng trí tuệ nhân tạo
         </p>
+        <p style='text-align: center; color: #7F8C8D; font-family: Arial;'>NCKH: P.Nam, H.Nam, P.Huy, T.Tiến, V.Vinh</p>
         <div style="margin-top: 15px;">
             <span style="background-color: #E8F4FC; color: #2E86C1; padding: 5px 15px; border-radius: 20px; font-size: 14px; display: inline-block; margin: 0 5px;">
                 XGBoost Model
@@ -185,11 +186,11 @@ st.markdown("""
             <span style="background-color: #E8F8F5; color: #28B463; padding: 5px 15px; border-radius: 20px; font-size: 14px; display: inline-block; margin: 0 5px;">
                 Độ chính xác 89%
             </span>
+            
         </div>
     </div>
 """, unsafe_allow_html=True)
 
-# Thêm ảnh header (nếu có)
 try:
     header_img = Image.open("header_bank.jpg")
     st.image(header_img, use_column_width=True)
@@ -197,7 +198,7 @@ except:
     pass
 
 # Nhập dữ liệu khách hàng với giao diện card
-st.markdown("""
+st.markdown(""" 
     <div class="divider"></div>
     <h3 style="color: #2C3E50; font-family: 'Segoe UI'; display: flex; align-items: center;">
         <span style="background-color: #2E86C1; color: white; border-radius: 50%; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px;">1</span>
@@ -426,9 +427,9 @@ st.markdown("""
         <div style="margin-bottom: 10px;">
             <span style="margin: 0 10px;">📞 Hotline: 1900 1234</span>
             <span style="margin: 0 10px;">✉️ Email: support@creditrisk.ai</span>
-            <span style="margin: 0 10px;">🏢 Địa chỉ: 123 Nguyễn Du, Hà Nội</span>
+            <span style="margin: 0 10px;">🏢 Địa chỉ: số 1 phố Xốm, Hà Đông, Hà Nội</span>
         </div>
-        <p>© 2025 - Hệ thống Dự đoán Rủi ro Tín dụng | Phát triển bởi nhóm NCKH</p>
+        <p>© 2025 - Hệ thống Dự đoán Rủi ro Tín dụng | Phát triển bởi nhóm NNVHT</p>
         <div style="margin-top: 15px;">
             <img src="https://img.icons8.com/ios-filled/30/3498DB/facebook.png" style="margin: 0 5px;"/>
             <img src="https://img.icons8.com/ios-filled/30/3498DB/twitter.png" style="margin: 0 5px;"/>
