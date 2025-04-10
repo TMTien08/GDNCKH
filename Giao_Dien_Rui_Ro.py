@@ -449,7 +449,7 @@ elif page == "📝 Phân tích mới":
             st.markdown("""
                 <div class="tooltip">
                     🏦 Tài khoản vãng lai
-                    <span class="tooltiptext">Không có: 0 DM<br>Ít: 1-200 USD<br>Trung bình: 201-500 USD<br>Nhiều: >500 USD</span>
+                    <span class="tooltiptext">Không có: 0 USD<br>Ít: 1-200 USD<br>Trung bình: 201-500 USD<br>Nhiều: >500 USD</span>
                 </div>
             """, unsafe_allow_html=True)
             checking_account = st.selectbox("", ["Không có", "Ít", "Trung bình", "Nhiều"], key="checking")
