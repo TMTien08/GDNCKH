@@ -403,8 +403,7 @@ elif page == "📝 Phân tích mới":
     # Header
     st.markdown("<h1 style='text-align: center; color: #2E86C1; font-family: Arial;'>🔍 Dự Đoán Rủi Ro Tín Dụng</h1>", unsafe_allow_html=True)
     st.markdown("<h4 style='text-align: center; color: #566573; font-family: Arial;'>Phân tích khả năng hoàn trả khoản vay một cách nhanh chóng và chính xác</h4>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #7F8C8D; font-family: Arial;'>NCKH: P.Nam, H.Nam, P.Huy, T.Tiến, V.Vinh</p>", unsafe_allow_html=True)
-
+    
     # Nhập dữ liệu khách hàng
     st.markdown("---")
     st.markdown("<h3 style='color: #2E86C1; font-family: Arial;'>📋 Nhập thông tin khách hàng</h3>", unsafe_allow_html=True)
