@@ -61,12 +61,6 @@ bg1 = local_image_base64("ad2.jpg")
 bg2 = local_image_base64("risk2.jpg")
 bg3 = local_image_base64("chiuu.jpg")
 
-# Debug: Kiểm tra xem hình ảnh có tải được không
-if not bg1 or not bg2 or not bg3:
-    st.error("Một hoặc nhiều hình ảnh không tải được. Kiểm tra đường dẫn file.")
-else:
-    st.success("Tất cả hình ảnh đã tải thành công!")
-
 # Chèn CSS vào ứng dụng
 st.markdown(f"""
 <style>
